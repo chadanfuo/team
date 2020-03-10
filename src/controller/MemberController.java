@@ -22,16 +22,12 @@ import util.JdbcUtil;
 import excep.LoginFailException;
 import model.Member;
 
-public class MemberController extends ActionAnnotation
-{
+public class MemberController extends ActionAnnotation{
     
     @Override
     public void initProcess(HttpServletRequest request,
             HttpServletResponse response)
-    {
-        // TODO Auto-generated method stub
-        
-    }
+    {   }
     
     @RequestMapping(value = "main")
     public String member_main(HttpServletRequest req, HttpServletResponse res)
@@ -44,7 +40,7 @@ public class MemberController extends ActionAnnotation
     public String member_joinForm(HttpServletRequest req,
             HttpServletResponse res) throws Exception
     {
-        return "/WEB-INF/view/member/joinForm.jsp";
+        return "/view/member/joinForm.jsp";
     }
     
     @RequestMapping(value = "join", method = RequestMethod.POST)
@@ -54,9 +50,23 @@ public class MemberController extends ActionAnnotation
     	 Member newMember = new Member(req.getParameter("email"),req.getParameter("name"),
                  req.getParameter("passwd"), 
                  req.getParameter("confirmpasswd"));
+    	 
+    	 Map<String, Boolean> errors = new HashMap<>();
+         req.setAttribute("errors", errors);
          
+         newMember.vaildate(errors);
+         
+         if (!errors.isEmpty()) return "/view/member/joinForm.jsp";
+         Connection conn = null;
+         try
+         {
         MemberDao memberDao = MemberDao.getInstance();
-      
+        Member member = memberDao.selectById(newMember.getEmail());
+        if (member != null)
+        {
+            JdbcUtil.rollback(conn);
+            throw new DuplicateldException();
+        }
         memberDao.insert(newMember);
         
        /*Member newMember = new Member(req.getParameter("email"),req.getParameter("name"),
@@ -83,10 +93,12 @@ public class MemberController extends ActionAnnotation
             
             memberDao.insert(newMember);
             */
-            /*req.setAttribute("message", "占쎌돳占쎌뜚揶쏉옙占쎌뿯 占쎌끏�뙴占�");
-            req.setAttribute("url", "member/main");
-            return "/WEB-INF/view/alert.jsp";*/
-            return "/WEB-INF/view/main.jsp";
+         }catch (DuplicateldException e)
+         {
+             errors.put("duplicateId", Boolean.TRUE);
+             return "/view/member/joinForm.jsp";
+         }
+            return "/view/main.jsp";
             
         }
        /* catch (DuplicateldException e)
@@ -101,7 +113,7 @@ public class MemberController extends ActionAnnotation
     public String member_loginForm(HttpServletRequest req,
             HttpServletResponse res) throws Exception
     {
-        return "/WEB-INF/view/member/loginForm.jsp";
+        return "/view/member/loginForm.jsp";
     }
     
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -120,7 +132,7 @@ public class MemberController extends ActionAnnotation
             errors.put("password", Boolean.TRUE);
         
         if (!errors.isEmpty()) 
-            return "/WEB-INF/view/member/loginForm.jsp";
+            return "/view/member/loginForm.jsp";
         
         try
         {
@@ -137,15 +149,13 @@ public class MemberController extends ActionAnnotation
         catch (LoginFailException e)
         {
             errors.put("idOrPwNotMatch", Boolean.TRUE);
-            return "/WEB-INF/view/member/loginForm.jsp";
+            return "/view/member/loginForm.jsp";
         }
         catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
-        req.setAttribute("message", "嚥≪뮄�젃占쎌뵥 占쎄쉐�⑨옙");
-        req.setAttribute("url", "member/main");
-        return "/WEB-INF/view/alert.jsp";
+        return "/view/main.jsp";
     }
     
     private String trim(String str)
@@ -162,7 +172,7 @@ public class MemberController extends ActionAnnotation
         {
             session.invalidate();
         }
-        return "/WEB-INF/view/main.jsp";
+        return "/view/main.jsp";
     }
     
     @RequestMapping(value = "changeinfo")

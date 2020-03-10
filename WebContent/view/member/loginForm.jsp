@@ -13,8 +13,8 @@
 아이디와 암호가 일치하지 않습니다.
 </c:if>
 <p>
-	아이디:<br/><input type="text" name="id" value="${param.id}">
-	<c:if test="${errors.id }">ID를 입력하세요</c:if>
+	아이디:<br/><input type="text" name="email" value="${param.email}">
+	<c:if test="${errors.email }">ID를 입력하세요</c:if>
 </p>
 <p>
 	암호:<br/><input type="password" name="passwd">

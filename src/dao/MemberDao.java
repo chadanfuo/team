@@ -30,10 +30,10 @@ public class MemberDao
         Connection conn = null;
         try
         {
-            String jdbcUrl = "jdbc:mysql://localhost:3306/jspdb";
+            String jdbcUrl = "jdbc:oracle:thin:@localhost:1521:orcl";
             String dbId = "scott";
             String dbpass = "1111";
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection(jdbcUrl, dbId, dbpass);
         }
         catch (Exception e)

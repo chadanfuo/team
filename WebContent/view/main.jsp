@@ -5,15 +5,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>체육관 메인</title>
+<title> 메인</title>
 </head>
 <body>
 <!-- 비로그인도 이동 가능 -->
-<a href="${pageContext.request.contextPath}/course/list">[강좌 목록 조회]</a>
+<%-- <a href="${pageContext.request.contextPath}/course/list">[강좌 목록 조회]</a>
 <a href="${pageContext.request.contextPath}/rent/list">[대관 가능 시설 조회]</a>
 <a href="${pageContext.request.contextPath}/minwon/list">[민원 게시판]</a>
 
-
+ --%>
 <br><br>
 
 
