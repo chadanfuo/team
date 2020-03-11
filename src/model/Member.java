@@ -1,14 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Member
-{
+public class Member implements Serializable{
     private String email;
     private String name;
     private String passwd;
     private String confirmpasswd;
-    
+    public Member(){}
     public Member(String email, String name, String passwd) {
 		this.email = email;
 		this.name = name;
@@ -22,10 +22,6 @@ public class Member
 		this.confirmpasswd = confirmpasswd;
 	}
     
-	
-    
-  
-  
    
     public String getEmail() {
 		return email;
